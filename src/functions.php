@@ -75,6 +75,11 @@ function makeOrder(
     }
     $msg = 'Спасибо! Это ваш ' . ++$count . ' заказ';
     $order .= $msg;
-    file_put_contents('../mail/msg'. date('Y_m_d_H_i_i'), $order);
+
+    $mailDir = 'mail';
+    if (!file_exists('../' . $mailDir)) {
+        mkdir('../' . $mailDir);
+    }
+    file_put_contents('../' . $mailDir . '/msg'. date('Y_m_d_H_i_i'), $order);
     return $msg;
 }
