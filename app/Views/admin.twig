@@ -1,0 +1,64 @@
+<h2>Заказы</h2>
+<table border="1">
+    <tr>
+        <td>Номер заказа</td>
+        <td>Улица</td>
+        <td>Дом</td>
+        <td>Корпус</td>
+        <td>Квартира</td>
+        <td>Этаж</td>
+        <td>Комментарий</td>
+        <td>Информация о оплате</td>
+        <td>Не перезванивать</td>
+        <td>Идентификатор пользователя</td>
+        <td>email</td>
+        <td>Имя</td>
+        <td>Телефон</td>
+    </tr>
+    {% for item in orders %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.street|e }}</td>
+        <td>{{ item.home|e }}</td>
+        <td>{{ item.part|e }}</td>
+        <td>{{ item.appt|e }}</td>
+        <td>{{ item.floor|e }}</td>
+        <td>{{ item.comment|e }}</td>
+        {% if item.payment == 1 %}
+            <td>Потребуется сдача</td>
+        {% elseif item.payment == 2 %}
+            <td>Оплата по карте</td>
+        {% else %}
+            <td>-</td>
+        {% endif %}
+        {% if item.callback == 1 %}
+            <td>Да</td>
+        {% else %}
+            <td>-</td>
+        {% endif %}
+
+        <td>{{ item.userId }}</td>
+        <td>{{ item.email|e }}</td>
+        <td>{{ item.name|e }}</td>
+        <td>{{ item.phone|e }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Пользователи</h2>
+<table border="1">
+    <tr>
+        <td>Идентификатор пользователя</td>
+        <td>E-mail</td>
+        <td>Имя</td>
+        <td>Телефон</td>
+    </tr>
+    {% for item in users %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.email|e }}</td>
+        <td>{{ item.name|e }}</td>
+        <td>{{ item.phone|e }}</td>
+    </tr>
+    {% endfor %}
+</table>

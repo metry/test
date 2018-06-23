@@ -10,7 +10,7 @@ function centerCss(className){
 $( "#order-form-button" ).on( "click", function() {
     $.ajax({
         type: "POST",
-        url: '/src/send.php',
+        url: '/main/send',
         data: $("#order-form").serialize(),
         dataType: 'json'
     }).done(function(data) {
