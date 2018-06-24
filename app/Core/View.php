@@ -7,7 +7,7 @@ class View
     private $loader;
     private $twig;
 
-    public function render(string $contentView, string $templateView, array $data)
+    public function render(string $contentView, string $templateView, $data = [])
     {
         $content = APPLICATION_PATH . "Views/" . $contentView . ".php";
         $template = APPLICATION_PATH . "Views/" . $templateView . ".php";
@@ -26,7 +26,7 @@ class View
         }
     }
 
-    public function renderTemplate(string $templateView, array $data)
+    public function renderTemplate(string $templateView, $data = [])
     {
         $template = APPLICATION_PATH . "Views/" . $templateView . ".php";
         try {
@@ -47,7 +47,7 @@ class View
         $this->twig = new \Twig_Environment($this->loader);
     }
 
-    public function twigLoad(String $templateView, array $data)
+    public function twigLoad(String $templateView, $data = [])
     {
         echo $this->twig->render($templateView.".twig", $data);
     }

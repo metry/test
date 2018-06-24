@@ -6,13 +6,9 @@ use App\Models\Main as MMain;
 
 class Main extends MainController
 {
-    const EMAIL = 'loftschooltestmsg@yandex.ru';
-    const NAME = 'loftschool_test_msg';
-    const PASSWORD = '234gJT3}Ds4K6mDPccN1o';
-
     public function index()
     {
-        $this->view->renderTemplate('template', []);
+        $this->view->renderTemplate('template');
     }
 
     public function admin()
@@ -22,14 +18,11 @@ class Main extends MainController
         $users = $model->getUsers();
 
         $this->view->twigLoad('admin', ['orders'=>$orders, 'users'=>$users]);
-        //$this->view->renderTemplate('admin', ['orders'=>$orders, 'users'=>$users]);
     }
 
     public function send()
     {
-        /*
-         * Валидация данных
-         */
+         //Валидация данных
 
         if (empty($_POST['email'])) {
             $errors[] = 'Заполните поле email';
@@ -45,14 +38,11 @@ class Main extends MainController
         }
 
         if ($errors) {
-            $result['errors'] = $errors;
-            echo json_encode($result);
-            exit();
+            echo json_encode(['errors'=>$errors]);
+            return null;
         }
 
-        /*
-         * Вставка значений в БД
-         */
+         //Вставка значений в БД
 
         $model = new MMain();
 
@@ -69,9 +59,8 @@ class Main extends MainController
             (int)$_POST['callback']
         );
 
-        /*
-         * Формирование текста письма
-         */
+         //Формирование текста письма
+
         $order = htmlspecialchars($_POST['name']) . ', вы сделали заказ!' . PHP_EOL;
         $order .= 'Номер заказа ' . $makeOrder['orderNumber'] . PHP_EOL;
         $order .= 'Ваш заказ будет доставлен по адресу:' . PHP_EOL;
@@ -100,23 +89,18 @@ class Main extends MainController
             'Спасибо! Это ваш ' . ++$makeOrder['count'] . ' заказ';
         $order .= $msg;
 
+         //Отправка письма
 
-        $result['msg'] = $msg;
-
-        /*
-         * Отправка письма
-         */
-
-        $transport = (new \Swift_SmtpTransport('smtp.yandex.ru', 465, 'SSL'))
-            ->setUsername(self::EMAIL)
-            ->setPassword(self::PASSWORD);
+        $transport = (new \Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SECURITY))
+            ->setUsername(EMAIL)
+            ->setPassword(USER_PASSWORD);
         $mailer = new \Swift_Mailer($transport);
         $message = (new \Swift_Message('Вы заказали доставку'))
-            ->setFrom([self::EMAIL => self::NAME])
+            ->setFrom([EMAIL => USER_NAME])
             ->setTo([trim($_POST['email']) => trim($_POST['name'])])
             ->setBody($order);
         if ($mailer->send($message)) {
-            echo json_encode($result);
+            echo json_encode(['msg'=>$msg]);
         }
     }
 }
